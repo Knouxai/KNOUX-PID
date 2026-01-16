@@ -1,22 +1,62 @@
 {
-  "name": "knoux-pid™-—-web-intelligence-engine",
-  "private": true,
-  "version": "0.0.0",
+  "name": "knox-project-intelligence-desktop",
+  "description": "KNOUX Project Intelligence Desktop™ - Production-Grade Desktop Application",
+  "version": "1.0.0",
   "type": "module",
+  "private": true,
+  "main": "./dist/main.js",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
+    "dev": "electron .",
+    "start": "electron .",
+    "build": "tsc && electron-builder",
+    "build:win": "tsc && electron-builder --win",
+    "build:mac": "tsc && electron-builder --mac",
+    "build:linux": "tsc && electron-builder --linux",
+    "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "@google/genai": "^1.37.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@google/genai": "^1.37.0",
+    "fs-extra": "^11.1.0",
+    "glob": "^8.0.3",
+    "chokidar": "^3.5.3",
+    "worker_threads": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.14.0",
-    "@vitejs/plugin-react": "^5.0.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
-  }
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/node": "^18.0.0",
+    "@types/fs-extra": "^11.0.0",
+    "@types/glob": "^8.0.0",
+    "@types/chokidar": "^2.1.3",
+    "electron": "^22.0.0",
+    "electron-builder": "^23.6.0",
+    "typescript": "^4.9.0",
+    "vite": "^4.0.0",
+    "@vitejs/plugin-react": "^3.0.0"
+  },
+  "keywords": [
+    "project-analysis",
+    "desktop-application",
+    "code-analyzer",
+    "electron",
+    "react",
+    "typescript",
+    "knox",
+    "intelligence",
+    "ai",
+    "development-tools"
+  ],
+  "author": "KNOUX Intelligence",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/knox-intelligence/knox-project-intelligence-desktop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/knox-intelligence/knox-project-intelligence-desktop/issues"
+  },
+  "homepage": "https://github.com/knox-intelligence/knox-project-intelligence-desktop#readme"
 }

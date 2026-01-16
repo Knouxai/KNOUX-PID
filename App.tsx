@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { TopBar } from './components/Layout/TopBar';
 import { Sidebar } from './components/Layout/Sidebar';
@@ -22,13 +21,20 @@ const App: React.FC = () => {
   const [devMode, setDevMode] = useState<DevMode>(DevMode.NEW_DEVELOPER);
 
   const handleFilesSelected = useCallback(async (files: File[]) => {
+    if (files.length === 0) {
+      console.warn("No files selected for analysis");
+      return;
+    }
+    
     setIsAnalyzing(true);
     try {
       const result = await analyzeProjectFiles(files, devMode);
       setProjectData(result);
     } catch (error) {
       console.error("Analysis failed", error);
-      alert("Neural Analysis Interrupted: Handshake protocol failed.");
+      const errorMessage = error instanceof Error ? error.message : String(error) || "Unknown error occurred during analysis";
+      // نعرض رسالة مفصّلة للمستخدم ونبقي على رسالة الفرع الآخر كجزء من التنبيه
+      alert(`Analysis failed: ${errorMessage}\nNeural Analysis Interrupted: Handshake protocol failed.\nPlease check your internet connection and API key.`);
     } finally {
       setIsAnalyzing(false);
     }
