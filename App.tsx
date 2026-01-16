@@ -19,13 +19,19 @@ const App: React.FC = () => {
   const [devMode, setDevMode] = useState<DevMode>(DevMode.NEW_DEVELOPER);
 
   const handleFilesSelected = useCallback(async (files: File[]) => {
+    if (files.length === 0) {
+      console.warn("No files selected for analysis");
+      return;
+    }
+    
     setIsAnalyzing(true);
     try {
       const result = await analyzeProjectFiles(files, devMode);
       setProjectData(result);
     } catch (error) {
       console.error("Analysis failed", error);
-      alert("Analysis failed. Please check your internet connection and API key.");
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred during analysis";
+      alert(`Analysis failed: ${errorMessage}\nPlease check your internet connection and API key.`);
     } finally {
       setIsAnalyzing(false);
     }

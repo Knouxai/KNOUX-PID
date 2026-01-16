@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 
 interface ProjectUploaderProps {
   onFilesSelected: (files: File[]) => void;
@@ -20,30 +20,33 @@ export const ProjectUploader: React.FC<ProjectUploaderProps> = ({ onFilesSelecte
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(false);
-    if (e.dataTransfer.files) {
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       onFilesSelected(Array.from(e.dataTransfer.files));
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
       onFilesSelected(Array.from(e.target.files));
     }
   };
 
   const handleBrowseFolder = async () => {
-    // @ts-ignore
+    // @ts-ignore - electronAPI might not exist in browser environment
     const api = window.electronAPI;
-    if (api && api.openFolderDialog) {
+    if (api && typeof api.openFolderDialog === 'function') {
       try {
         const selectedPaths = await api.openFolderDialog();
-        if (selectedPaths && selectedPaths.length > 0) {
+        if (selectedPaths && Array.isArray(selectedPaths) && selectedPaths.length > 0) {
           alert(`Scanning Path: ${selectedPaths[0]}. \nReady to vectorize artifacts.`);
         }
       } catch (err) {
         console.error("Failed to open folder dialog", err);
+        // Fallback to regular file input
+        fileInputRef.current?.click();
       }
     } else {
+      // No electron API available, just click the file input
       fileInputRef.current?.click();
     }
   };
