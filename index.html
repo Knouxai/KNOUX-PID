@@ -1,27 +1,134 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KNOUX Project Intelligence Desktop™</title>
+  <title>KNOUX PID™ — Project Intelligence Desktop</title>
+
+  <!-- Tailwind & Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
+    /* Base / typography */
     body {
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      overflow: hidden; /* Prevent scrollbars since this is a desktop app */
+      background-color: #010309;
+      color: #f3f4f6;
+      /* Prevent horizontal scroll; desktop app may prefer no scrollbars */
+      overflow-x: hidden;
+      overflow-y: hidden; /* keep hidden as desktop app behavior */
     }
-    
+
+    /* Ensure root takes full viewport (desktop container) */
     #root {
       height: 100vh;
       width: 100vw;
     }
+
+    /* CRT STATIC EFFECT */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://grainy-gradients.vercel.app/noise.svg');
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* SCANLINE EFFECT */
+    body::after {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+          rgba(18, 16, 16, 0) 50%,
+          rgba(0, 0, 0, 0.05) 50%),
+        linear-gradient(90deg,
+          rgba(255, 0, 0, 0.01),
+          rgba(0, 255, 0, 0.005),
+          rgba(0, 0, 255, 0.01));
+      background-size: 100% 4px, 3px 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.4);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .neon-glow {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.1), 0 0 40px rgba(6, 182, 212, 0.05);
+    }
+
+    @keyframes scan {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(100%); }
+    }
+
+    .tv-on {
+      animation: tvOn 0.5s ease-out forwards;
+    }
+
+    @keyframes tvOn {
+      0% { transform: scaleX(0) scaleY(0.01); opacity: 0; filter: brightness(10); }
+      50% { transform: scaleX(1) scaleY(0.01); opacity: 1; filter: brightness(5); }
+      100% { transform: scaleX(1) scaleY(1); opacity: 1; filter: brightness(1); }
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(100%); }
+      to { transform: translateX(-100%); }
+    }
+
+    .animate-marquee {
+      animation: marquee 20s linear infinite;
+    }
+
+    /* Custom scrollbars (if ever enabled) */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #010309;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2d3748;
+      border-radius: 10px;
+    }
+
+    /* Legacy desktop-specific override note:
+       Keep overflow hidden to preserve desktop app UX (no native window scrollbars).
+       If you later prefer page scrolling (web target), remove overflow-y: hidden above. */
   </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "react/": "https://esm.sh/react@^19.2.3/",
+      "react": "https://esm.sh/react@^19.2.3",
+      "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+      "@google/genai": "https://esm.sh/@google/genai@^1.37.0"
+    }
+  }
+  </script>
 </head>
 <body>
   <div id="root"></div>
